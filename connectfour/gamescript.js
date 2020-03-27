@@ -1,9 +1,9 @@
 //assgnig players with clors and retriving thier names
 var player1=prompt("Player 1: Enter Your Name.  You will be Blue!");
-var player1color='rgb(86,151,255)'; //rgb for red
+var player1Color='rgb(86,151,255)'; //rgb for red
 
 var player2=prompt("Player 2: Enter Your Name. You will Be Red!");
-var player2color='rgb(237,45,73)'; //rgb for blue
+var player2Color='rgb(237,45,73)'; //rgb for blue
 
 var game_on=true; // boolean value to know whether game is runing or not
 var table=$('table tr');
@@ -23,103 +23,116 @@ function returnColor(rowIndex,colIndex){
 }
 
 function checkBottom(colIndex){
-    var colorReturn= returnColor(5,colIndex);
-    for (var row=5; row > -1 ; row--){
-        colorReturn=returnColor(row,colIndex);
-        if (colorReturn==='rgb(128,128,128)'){ //rgb(128,128,128) implies color gray
-            return row
-        }
+    var colorReport = returnColor(5, colIndex);
+  for (var row = 5; row>-1; row--) {
+    colorReport = returnColor(row,colIndex);
+    if(colorReport === 'rgb(128, 128, 128)'){
+      return row;
     }
+  }
 }
 
 function colorMatchCheck(one,two,three,four){
-    return (one === two && one === three && one === four && one != 'rgb(128,128,128)' && one !== undefined )
-
+    return (one===two && one===three && one===four && one!=='rgb(128, 128, 128)' && one !==undefined);
 }
 
 //to check horizontal win
 function horizontalWin(){
-    for(var row = 0; row < 6 ; row++){
-        for (var col=0; col < 4; col++){
-            if (colorMatchCheck(returnColor(row,col),returnColor(row,col+1),returnColor(row,col+2),returnColor(row,col+3))){
-                console.log('horiz');
-                reportWin(row,col);
-                return true;
-            } else {
-                continue;
-            }
+    for (var row = 0; row < 6; row++) {
+        for (var col = 0; col < 4; col++) {
+          if (colorMatchCheck(returnColor(row,col), returnColor(row,col+1) ,returnColor(row,col+2), returnColor(row,col+3))) {
+            console.log('horiz');
+            reportWin(row,col);
+            return true;
+          }else {
+            continue; //just tells the code to continue and not do anything
+          }
         }
+      }
     }
-}
-
 
 //to check vertical win
 function verticalWin(){
-    for(var col=0; col<7; col++){
-        for (var row=0; row<3; row++){
-            if (colorMatchCheck(returnColor(row,col),returnColor(row+1,col),returnColor(row+2,col),returnColor(row+3,col))){
-                console.log('vertical');
-                reportWin(row,col);
-                return true;
-            } else {
-                continue;
-            }
+    for (var col = 0; col < 7; col++) {
+        for (var row = 0; row < 3; row++) {
+          if (colorMatchCheck(returnColor(row,col), returnColor(row+1,col) ,returnColor(row+2,col), returnColor(row+3,col))) {
+            console.log('vertical');
+            reportWin(row,col);
+            return true;
+          }else {
+            continue;
+          }
         }
+      }
     }
-}
 
 //to check horizontal win
 function diagonalWin(){
-    for(var col=0; col<5; col++){
-        for (var row=0; row<7; row++){
-            if (colorMatchCheck(returnColor(row,col),returnColor(row+1,col+1),returnColor(row+2,col+2),returnColor(row+3,col+3))){
-                console.log('diagonal');
-                reportWin(row,col);
-                return true;
-            } else if (colorMatchCheck(returnColor(row,col),returnColor(row-1,col+1),returnColor(row-2,col+2),returnColor(row-3,col+3))){
-                console.log('diagonal');
-                reportWin(row,col);
-                return true;
-            } else {
-                continue;
-            }
+    for (var col = 0; col < 5; col++) {
+        for (var row = 0; row < 7; row++) {
+          if (colorMatchCheck(returnColor(row,col), returnColor(row+1,col+1) ,returnColor(row+2,col+2), returnColor(row+3,col+3))) {
+            console.log('diag');
+            reportWin(row,col);
+            return true;
+          }else if (colorMatchCheck(returnColor(row,col), returnColor(row-1,col+1) ,returnColor(row-2,col+2), returnColor(row-3,col+3))) {
+            console.log('diag');
+            reportWin(row,col);
+            return true;
+          }else {
+            continue;
+          }
         }
+      }
     }
-}
-
-//Game Logic
-
-//player1
-var currentPlayer=1;
-var currentName=player1;
-var currentColor=player1color;
-$('h3').text(player1 + "its your turn, click a coloumn");
-
-$('.gameboard button').on('click',function(){
-    var col=$(this).closest('td').index();
-    var bottomAvailable = checkBottom(col);
-    changeColor(bottomAvailable,col,currentColor);
-
-    if (horizontalWin() || verticalWin() || diagonalWin()){
-        $('h1').text(currentName + " You Have Won!");
+// Game End
+function gameEnd(winningPlayer) {
+    for (var col = 0; col < 7; col++) {
+      for (var row = 0; row < 7; row++) {
         $('h3').fadeOut('fast');
         $('h2').fadeOut('fast');
-        //game_on=false;
+        $('h1').text(winningPlayer+" has won! Refresh your browser to play again!").css("fontSize", "50px")
+      }
     }
+  }
 
-    currentPlayer = currentPlayer * -1;
+//Game Logic
+//player1
+var currentPlayer =1;
+var currentName = player1;
+var currentColor = player1Color;
 
-    if (currentPlayer == 1){
-    currentName = player1;
-    $('h3').text(currentName + " Its Your Turn.")
-    currentColor=player1color;
+$('h3').text(player1+":its your turn, click a coloumn");
+
+$('.board button').on('click', function(){
+
+    // Recognize what column was chosen
+    var col = $(this).closest("td").index();
+  
+    // Get back bottom available row to change
+    var bottomAvail = checkBottom(col);
+  
+    changeColor(bottomAvail, col, currentColor);
+  
+    if(horizontalWin || verticalWin || diagonalWinCheck){
+      $('h1').text(currentName + " You have won! Congratulations!");
+      $('h3').fadeOut('fast');
+      $('h2').fadeOut('fast');
+      gameEnd(currentName);
+    }
+  
+    currentPlayer = currentPlayer*-1;
+  
+    if(currentPlayer === 1){
+      currentName = player1;
+      $('h3').text(currentName+ " it is your turn.");
+      currentColor = player1Color;
     }else{
-    currentName=player2;
-    $('h3').text(currentName + " Its Your Turn.")
-    currentColor=player2color;
+      currentName = player2;
+      $('h3').text(currentName+ " it is your turn.");
+      currentColor = player2Color;
     }
-
-})
+  
+  })
 
 
 
