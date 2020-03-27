@@ -1,14 +1,14 @@
 //assgnig players with clors and retriving thier names
 var player1=prompt("Player 1: Enter Your Name.  You will be Blue!");
-var player1color="rgb(86,151,255)"; //rgb for red
+var player1color='rgb(86,151,255)'; //rgb for red
 
 var player2=prompt("Player 2: Enter Your Name. You will Be Red!");
-var player2color="rgb(237,45,73)"; //rgb for blue
+var player2color='rgb(237,45,73)'; //rgb for blue
 
 var game_on=true; // boolean value to know whether game is runing or not
 var table=$('table tr');
 
-function reportwin(rowNum,colNum){
+function reportWin(rowNum,colNum){
     console.log("you won starting at this row, col");
     console.log(rowNum);
     console.log(colNum);
@@ -24,7 +24,7 @@ function returnColor(rowIndex,colIndex){
 
 function checkBottom(colIndex){
     var colorReturn= returnColor(5,colIndex);
-    for (var row=5; row>-1 ; row--){
+    for (var row=5; row > -1 ; row--){
         colorReturn=returnColor(row,colIndex);
         if (colorReturn==='rgb(128,128,128)'){ //rgb(128,128,128) implies color gray
             return row
@@ -33,17 +33,17 @@ function checkBottom(colIndex){
 }
 
 function colorMatchCheck(one,two,three,four){
-    return (one === two && one === three && one === four && one !== 'rgb(128,128,128)' && one !== undefined )
+    return (one === two && one === three && one === four && one != 'rgb(128,128,128)' && one !== undefined )
 
 }
 
 //to check horizontal win
 function horizontalWin(){
-    for(var row=0; row<6 ; row++){
-        for (var col=0; col<4; col++){
+    for(var row = 0; row < 6 ; row++){
+        for (var col=0; col < 4; col++){
             if (colorMatchCheck(returnColor(row,col),returnColor(row,col+1),returnColor(row,col+2),returnColor(row,col+3))){
                 console.log('horiz');
-                reportwin(row,col);
+                reportWin(row,col);
                 return true;
             } else {
                 continue;
@@ -59,7 +59,7 @@ function verticalWin(){
         for (var row=0; row<3; row++){
             if (colorMatchCheck(returnColor(row,col),returnColor(row+1,col),returnColor(row+2,col),returnColor(row+3,col))){
                 console.log('vertical');
-                reportwin(row,col);
+                reportWin(row,col);
                 return true;
             } else {
                 continue;
@@ -74,11 +74,11 @@ function diagonalWin(){
         for (var row=0; row<7; row++){
             if (colorMatchCheck(returnColor(row,col),returnColor(row+1,col+1),returnColor(row+2,col+2),returnColor(row+3,col+3))){
                 console.log('diagonal');
-                reportwin(row,col);
+                reportWin(row,col);
                 return true;
             } else if (colorMatchCheck(returnColor(row,col),returnColor(row-1,col+1),returnColor(row-2,col+2),returnColor(row-3,col+3))){
                 console.log('diagonal');
-                reportwin(row,col);
+                reportWin(row,col);
                 return true;
             } else {
                 continue;
@@ -97,24 +97,27 @@ $('h3').text(player1 + "its your turn, click a coloumn");
 
 $('.gameboard button').on('click',function(){
     var col=$(this).closest('td').index();
-var bottomAvailable = checkBottom(col);
-changeColor(bottomAvailable,col,currentColor);
-if (horizontalWin() || verticalWin() || diagonalWin()){
-    $('h1').text(currentName + "You Have Won!");
-    $('h3').fadeOut('fast');
-    $('h2').fadeOut('fast');
-}
-currentPlayer = currentPlayer * -1;
+    var bottomAvailable = checkBottom(col);
+    changeColor(bottomAvailable,col,currentColor);
 
-if (currentPlayer==1){
-    currentName=player1;
+    if (horizontalWin() || verticalWin() || diagonalWin()){
+        $('h1').text(currentName + " You Have Won!");
+        $('h3').fadeOut('fast');
+        $('h2').fadeOut('fast');
+        //game_on=false;
+    }
+
+    currentPlayer = currentPlayer * -1;
+
+    if (currentPlayer == 1){
+    currentName = player1;
     $('h3').text(currentName + " Its Your Turn.")
     currentColor=player1color;
-}else{
+    }else{
     currentName=player2;
     $('h3').text(currentName + " Its Your Turn.")
-    currentColor=player2color
-}
+    currentColor=player2color;
+    }
 
 })
 
