@@ -8,7 +8,11 @@ var player2Color='rgb(237,45,73)'; //rgb for blue
 var game_on=true; // boolean value to know whether game is runing or not
 var table=$('table tr');
 
+if (game_on===true){
+
+
 function reportWin(rowNum,colNum){
+
     console.log("you won starting at this row, col");
     console.log(rowNum);
     console.log(colNum);
@@ -33,7 +37,12 @@ function checkBottom(colIndex){
 }
 
 function colorMatchCheck(one,two,three,four){
-    return (one===two && one===three && one===four && one!=='rgb(128, 128, 128)' && one !==undefined);
+   
+    // if (one===two && one===three && one===four )
+    // {
+    //     return (one!=='rgb(128, 128, 128)')
+    // }
+    return (one===two && one===three && one===four && one!=="rgb(128, 128, 128)" && one !==undefined);
 }
 
 //to check horizontal win
@@ -41,7 +50,9 @@ function horizontalWin(){
     for (var row = 0; row < 6; row++) {
         for (var col = 0; col < 4; col++) {
           if (colorMatchCheck(returnColor(row,col), returnColor(row,col+1) ,returnColor(row,col+2), returnColor(row,col+3))) {
+        
             console.log('horiz');
+            //console.log(one);
             reportWin(row,col);
             return true;
           }else {
@@ -91,6 +102,7 @@ function gameEnd(winningPlayer) {
         $('h3').fadeOut('fast');
         $('h2').fadeOut('fast');
         $('h1').text(winningPlayer+" has won! Refresh your browser to play again!").css("fontSize", "50px")
+        game_on=false;
       }
     }
   }
@@ -113,7 +125,7 @@ $('.board button').on('click', function(){
   
     changeColor(bottomAvail, col, currentColor);
   
-    if(horizontalWin || verticalWin || diagonalWinCheck){
+    if(horizontalWin() || verticalWin() || diagonalWin()){
       $('h1').text(currentName + " You have won! Congratulations!");
       $('h3').fadeOut('fast');
       $('h2').fadeOut('fast');
@@ -133,7 +145,7 @@ $('.board button').on('click', function(){
     }
   
   })
-
+}
 
 
 
