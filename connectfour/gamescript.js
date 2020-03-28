@@ -8,7 +8,7 @@ var player2Color='rgb(237,45,73)'; //rgb for blue
 var game_on=true; // boolean value to know whether game is runing or not
 var table=$('table tr');
 
-if (game_on===true){
+
 
 
 function reportWin(rowNum,colNum){
@@ -51,7 +51,7 @@ function horizontalWin(){
         for (var col = 0; col < 4; col++) {
           if (colorMatchCheck(returnColor(row,col), returnColor(row,col+1) ,returnColor(row,col+2), returnColor(row,col+3))) {
         
-            console.log('horiz');
+            console.log('horizontal win');
             //console.log(one);
             reportWin(row,col);
             return true;
@@ -67,7 +67,7 @@ function verticalWin(){
     for (var col = 0; col < 7; col++) {
         for (var row = 0; row < 3; row++) {
           if (colorMatchCheck(returnColor(row,col), returnColor(row+1,col) ,returnColor(row+2,col), returnColor(row+3,col))) {
-            console.log('vertical');
+            console.log('vertical win');
             reportWin(row,col);
             return true;
           }else {
@@ -82,11 +82,11 @@ function diagonalWin(){
     for (var col = 0; col < 5; col++) {
         for (var row = 0; row < 7; row++) {
           if (colorMatchCheck(returnColor(row,col), returnColor(row+1,col+1) ,returnColor(row+2,col+2), returnColor(row+3,col+3))) {
-            console.log('diag');
+            console.log('diagonal win');
             reportWin(row,col);
             return true;
           }else if (colorMatchCheck(returnColor(row,col), returnColor(row-1,col+1) ,returnColor(row-2,col+2), returnColor(row-3,col+3))) {
-            console.log('diag');
+            console.log('diagonal win');
             reportWin(row,col);
             return true;
           }else {
@@ -114,7 +114,7 @@ var currentName = player1;
 var currentColor = player1Color;
 
 $('h3').text(player1+":its your turn, click a coloumn");
-
+//if (game_on==true){
 $('.board button').on('click', function(){
 
     // Recognize what column was chosen
@@ -128,7 +128,9 @@ $('.board button').on('click', function(){
     if(horizontalWin() || verticalWin() || diagonalWin()){
       $('h1').text(currentName + " You have won! Congratulations!");
       $('h3').fadeOut('fast');
-      $('h2').fadeOut('fast');
+      $('h2').fadeOut();
+      $('h5').fadeOut();
+      $('table').slideUp('slow');
       gameEnd(currentName);
     }
   
@@ -145,7 +147,7 @@ $('.board button').on('click', function(){
     }
   
   })
-}
+//}
 
 
 
